@@ -118,10 +118,14 @@ header .current-date{
 .btn::before{
     content: '🖤';
 }
-
 body.dark{
     color: #a8acb0;
     background: #1b1f23;
+    transition: all 0.5s ease;
+}
+body.light{
+    color: #333;
+    background: #fff;
     transition: all 0.5s ease;
 }
 body.dark .btn::before{
