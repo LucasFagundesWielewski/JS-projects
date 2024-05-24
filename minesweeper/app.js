@@ -36,8 +36,56 @@ document.addEventListener('DOMContentLoaded', () => {
             const isLeftEdge = (i % width === 0)
             const isRightEdge = (i % width === width - 1)
             if (squares[i].classList.contains('valid')) {
-                
+                if (i > 0 && !isLeftEdge && squares[i - 1].classList.contains('bomb'))
+                    total ++
+                if (i > 9 && !isRightEdge && squares[i + 1 -width].classList.contains('bomb'))
+                    total ++
+                if (i > 10 && squares[i -width].classList.contains('bomb'))
+                    total ++
+                if (i > 11 && !isLeftEdge && squares[i -1 -width].classList.contains('bomb'))
+                    total ++
+                if (i < 98 && !isRightEdge && squares[i + 1].classList.contains('bomb'))
+                    total ++
+                if (i < 90 && !isLeftEdge && squares[i -1 +width].classList.contains('bomb'))
+                    total ++
+                if (i < 88 && !isRightEdge && squares[i + 1 +width].classList.contains('bomb'))
+                    total ++
+                if (i < 89 && squares[i +width].classList.contains('bomb'))
+                    total ++
+                squares[i].setAttribute('data', total)
             }
         }
+    }
+
+    createBoard()
+
+    function click(square) {
+        let currentId = square.id
+        if (isGameOver) return
+        if (square.classList,contains('checked') || square.classList.contains('flag')) return
+        if (square.classList.contains('bomb')) {
+            isGameOver(square)
+        } else {
+            let total = square.getAttribute('data')
+            if (total!=0) {
+                if (total == 1) square.classList.add('one')
+                if (total == 2) square.classList.add('two')
+                if (total == 3) square.classList.add('three')
+                if (total == 4) square.classList.add('four')
+                square.innerHTML = total
+                return
+            }
+            checkSquare(square, currentId)
+        }
+        square.classList.add('check')
+    }
+
+    function checkSquare(square, currentId) {
+        const isLeftEdge = (currentId %width === 0)
+        const isRightEdge = (currentId %width === width -1)
+
+        setTimeout(() => {
+            
+        })
     }
 })
