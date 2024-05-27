@@ -1,13 +1,20 @@
-body{
+body {
     background-color: #FDF5E6;
 }
-.container{
+
+body.dark-mode {
+    background-color: #333;
+    color: #FFF;
+}
+
+.container {
     align-content: center;
     width: 50%;
     margin: auto;
     padding: 10px;
 }
-.grid{
+
+.grid {
     height: 400px;
     width: 400px;
     flex-wrap: wrap;
@@ -17,22 +24,35 @@ body{
     margin: auto;
     margin-bottom: 20px;
 }
-h3{
-    font-family: 'Robiti Mono', monospace;
+
+body.dark-mode .grid {
+    background-color: #444;
+    border-color: #444;
 }
-div{
+
+h3 {
+    font-family: 'Roboto Mono', monospace;
+}
+
+div {
     font-size: 25px;
     text-align: center;
-    font-family: 'Robiti Mono', monospace;
+    font-family: 'Roboto Mono', monospace;
 }
-.valid{
+
+.valid, .bomb {
     height: 40px;
     width: 40px;
     border: 5px solid;
     border-color: #f5f3eb #bab7a9 #bab7a9 #fff9db;
     box-sizing: border-box;
 }
-.checked{
+
+body.dark-mode .valid, body.dark-mode .bomb {
+    border-color: #666 #444 #444 #888;
+}
+
+.checked {
     height: 40px;
     width: 40px;
     border: 2px solid;
@@ -40,32 +60,37 @@ div{
     border-color: #9c998d;
     box-sizing: border-box;
 }
-.bomb{
-    height: 40px;
-    width: 40px;
-    border: 5px solid;
-    border-color: #f5f3eb #bab7a9 #bab7a9 #fff9db;
-    box-sizing: border-box;
+
+body.dark-mode .checked {
+    background-color: #666;
+    border-color: #888;
 }
-.one{
+
+.one {
     color: #e76346;
 }
-  
-.two{
+
+.two {
     color: #4199d3;
 }
-  
-.three{
+
+.three {
     color: #57da59;
 }
-  
-.four{
+
+.four {
     color: #bb41d3;
 }
-#result{
+
+#result {
     margin-top: 5px;
     color: #e76346;
 }
+
+body.dark-mode #result {
+    color: #e76346;
+}
+
 .button {
     margin-top: 15px;
     font-size: 15px;
@@ -74,5 +99,10 @@ div{
     width: 150px;
     cursor: pointer;
     border: none;
-    font-family: 'Robiti Mono', monospace;
+    font-family: 'Roboto Mono', monospace;
+}
+
+body.dark-mode .button {
+    background-color: #666;
+    color: #FFF;
 }
