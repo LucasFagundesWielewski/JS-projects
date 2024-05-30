@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentTimeDisplay = document.querySelector('#current-time');
     const bestTimeDisplay = document.querySelector('#best-time');
     const toggleThemeButton = document.querySelector('#toggle-theme');
+    const useHintButton = document.querySelector('#use-hint'); 
+    const hintsLeftDisplay = document.querySelector('#hints-left'); 
+
     let width = 10;
     let bombAmount = 10;
     let flags = 0;
@@ -13,12 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let timer;
     let time = 0;
     let bestTime = localStorage.getItem('bestTime') || 0;
+    let hints = 3; 
 
     if (bestTime) {
         bestTimeDisplay.innerHTML = bestTime;
     }
 
-    // Check theme preference on load
     const isDarkMode = localStorage.getItem('darkMode') === 'true';
     if (isDarkMode) {
         document.body.classList.add('dark-mode');
@@ -28,6 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.toggle('dark-mode');
         localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
     });
+
+    useHintButton.addEventListener('click', useHint);
 
     function startTimer() {
         timer = setInterval(() => {
@@ -44,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         grid.innerHTML = '';
         result.innerHTML = '';
         flagsLeft.innerHTML = bombAmount;
+        hintsLeftDisplay.innerHTML = hints = 3;
         flags = 0;
         squares = [];
         isGameOver = false;
@@ -218,6 +224,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 bestTime = time;
                 localStorage.setItem('bestTime', bestTime);
                 bestTimeDisplay.innerHTML = bestTime;
+            }
+        }
+    }
+
+    function useHint() {
+        if (hints > 0 && !isGameOver) {
+            let validSquares = squares.filter(square => !square.classList.contains('checked') && !square.classList.contains('bomb'));
+            if (validSquares.length === 0) return;
+
+            let randomSquare = validSquares[Math.floor(Math.random() * validSquares.length)];
+            let total = randomSquare.getAttribute('data');
+            if (total != 0) {
+                randomSquare.classList.add('hint');
+                randomSquare.innerHTML = total;
+            } else {
+                randomSquare.classList.add('checked');
+                checkSquare(randomSquare, randomSquare.id);
+            }
+
+            hints--;
+            hintsLeftDisplay.innerHTML = hints;
+            if (hints === 0) {
+                useHintButton.disabled = true;
             }
         }
     }

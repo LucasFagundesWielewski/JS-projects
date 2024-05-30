@@ -106,3 +106,12 @@ body.dark-mode .button {
     background-color: #666;
     color: #FFF;
 }
+
+#hints-left {
+    margin-top: 5px;
+    color: #e76346;
+}
+
+body.dark-mode #hints-left {
+    color: #e76346;
+}
