@@ -5,18 +5,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentTimeDisplay = document.querySelector('#current-time');
     const bestTimeDisplay = document.querySelector('#best-time');
     const toggleThemeButton = document.querySelector('#toggle-theme');
-    const useHintButton = document.querySelector('#use-hint'); 
-    const hintsLeftDisplay = document.querySelector('#hints-left'); 
-
+    const toggleHardModeButton = document.querySelector('#toggle-hard-mode'); // Novo botão para Modo Difícil
     let width = 10;
     let bombAmount = 10;
+    let hardMode = false;
     let flags = 0;
     let squares = [];
     let isGameOver = false;
     let timer;
     let time = 0;
     let bestTime = localStorage.getItem('bestTime') || 0;
-    let hints = 3; 
 
     if (bestTime) {
         bestTimeDisplay.innerHTML = bestTime;
@@ -32,7 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
     });
 
-    useHintButton.addEventListener('click', useHint);
+    toggleHardModeButton.addEventListener('click', () => {
+        hardMode = !hardMode;
+        bombAmount = hardMode ? 20 : 10; 
+        resetGame();
+    });
 
     function startTimer() {
         timer = setInterval(() => {
@@ -49,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
         grid.innerHTML = '';
         result.innerHTML = '';
         flagsLeft.innerHTML = bombAmount;
-        hintsLeftDisplay.innerHTML = hints = 3;
         flags = 0;
         squares = [];
         isGameOver = false;
@@ -194,19 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 10);
     }
 
-    function gameOver(square) {
-        result.innerHTML = 'BOOM! Game Over!';
-        isGameOver = true;
-        stopTimer();
-        squares.forEach(square => {
-            if (square.classList.contains('bomb')) {
-                square.innerHTML = '💣';
-                square.classList.remove('bomb');
-                square.classList.add('checked');
-            }
-        });
-    }
-
     function checkForWin() {
         let matches = 0;
 
@@ -214,40 +202,28 @@ document.addEventListener('DOMContentLoaded', () => {
             if (squares[i].classList.contains('flag') && squares[i].classList.contains('bomb')) {
                 matches++;
             }
-        }
-
-        if (matches === bombAmount) {
-            result.innerHTML = 'YOU WIN!';
-            isGameOver = true;
-            stopTimer();
-            if (!bestTime || time < bestTime) {
-                bestTime = time;
-                localStorage.setItem('bestTime', bestTime);
-                bestTimeDisplay.innerHTML = bestTime;
+            if (matches === bombAmount) {
+                result.innerHTML = 'YOU WIN!';
+                stopTimer();
+                isGameOver = true;
+                if (time < bestTime || bestTime === 0) {
+                    bestTime = time;
+                    localStorage.setItem('bestTime', bestTime);
+                    bestTimeDisplay.innerHTML = bestTime;
+                }
             }
         }
     }
 
-    function useHint() {
-        if (hints > 0 && !isGameOver) {
-            let validSquares = squares.filter(square => !square.classList.contains('checked') && !square.classList.contains('bomb'));
-            if (validSquares.length === 0) return;
+    function gameOver(square) {
+        result.innerHTML = 'BOOM! Game Over!';
+        stopTimer();
+        isGameOver = true;
 
-            let randomSquare = validSquares[Math.floor(Math.random() * validSquares.length)];
-            let total = randomSquare.getAttribute('data');
-            if (total != 0) {
-                randomSquare.classList.add('hint');
-                randomSquare.innerHTML = total;
-            } else {
-                randomSquare.classList.add('checked');
-                checkSquare(randomSquare, randomSquare.id);
+        squares.forEach(square => {
+            if (square.classList.contains('bomb')) {
+                square.innerHTML = '💣';
             }
-
-            hints--;
-            hintsLeftDisplay.innerHTML = hints;
-            if (hints === 0) {
-                useHintButton.disabled = true;
-            }
-        }
+        });
     }
 });
